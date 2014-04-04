@@ -9,3 +9,8 @@ li img {
 .tips {
 	color:red;
 }
+
+.deleteFiles {
+	text-decoration: none;
+	color: black;
+}
