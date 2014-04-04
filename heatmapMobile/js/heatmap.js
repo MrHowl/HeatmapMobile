@@ -1,12 +1,6 @@
 $(document).ready(function() {
     
-    var j = jQuery.noConflict(true);
-
-    j("#test").click(function(event) {
-        /* Act on the event */
-        alert("a");
-    });
-
+    var jQ = jQuery.noConflict(true);
 
     function $(id) {//获取元素的方法
 
@@ -20,21 +14,13 @@ $(document).ready(function() {
 
         info = $("info"),//不支持Html5；上传失败；上传成功
 
-        imageBox = $("imageBox"),//不是图片;图片的信息
+        imageBox = $("imageBox"),//图片的信息
 
         btnUpload = $("btnUpload"),//上传按钮
 
-        progress = $("Progress"),//上传进度
-
         percent = $("percent"),//上传百分比
 
-        uploadSpeed = $("uploadSpeed"),//上传速度
-
-        wrapper = $("wrapper"),//总的父元素
-
-        testp = $("testp"),
-
-        deletefiles = $("deleteFiles");//删除图片
+        wrapper = $("wrapper");//总的父元素
 
     //定义存放图片对象的数组,调用了$函数
 
@@ -75,15 +61,13 @@ $(document).ready(function() {
 
         if (className == "deleteFiles") {
 
-            var index = j(tar).parent().index();
+            var index = jQ(tar).parent().index();   
 
-            j(tar).parent().remove();
-
-            testp.innerHTML = index;
+            jQ(tar).parent().remove();
 
             uploadImgArr.splice(index,1);
 
-            //console.log(uploadImgArr);
+            console.log(uploadImgArr);
 
         }
 
@@ -101,21 +85,9 @@ $(document).ready(function() {
 
         var files = e.target.files;//对象中的一组数据：文件
 
-            //验证是否是图片文件的正则
-
-            reg = /image\/.*/i;
-
         //console.log(files);
 
         for (var i = 0, f; f = files[i]; i++) {//files[i]存在即可循环，针对多选图片的写法
-
-            //把这个if判断去掉后，也能上传别的文件
-            /*if (!reg.test(f.type)) {//判断上传的是否是图片，input中已经用到了accept属性，故此处不需要
-
-                imageBox.innerHTML += "<li>你选择的" + f.name + "文件不是图片</li>";
-                //跳出循环
-                continue;
-            }*/
 
             //console.log(f);
 
@@ -133,15 +105,9 @@ $(document).ready(function() {
 
                     fileName = file.name;//图片的名字，保留五位
 
-                    //fileType = file.type;//图片的类型，不需要
-
                 //console.log(fileName)
 
                 return function(e) {
-
-                    //console.log(e.target)
-
-                    //获取图片的宽高
 
                     var img = new Image();//预览图片
 
@@ -151,13 +117,7 @@ $(document).ready(function() {
 
                     function imgLoaded() {
 
-                        //imgWidth = img.width;//文件的宽度，不需要
-
-                        //imgHeight = img.height;//文件的高度，不需要
-
-                        //图片加载完成后才能获取imgWidth和imgHeight
-
-                        imageBox.innerHTML += "<li><img src='" + e.target.result + "' alt='" + fileName + "' title='" + fileName + "'> 图片名称是：" + fileName + ";图片的的大小是：" + fileSize + "<br/><a href='javascript:void(0);' class='deleteFiles'>delete</a></li>";
+                        imageBox.innerHTML += "<li><img src='" + e.target.result + "' alt='" + fileName + "' title='" + fileName + "'> <span>" + fileName + "</span><br/><span>" + fileSize + "</span><br/><a href='javascript:void(0);' class='deleteFiles'>delete</a><p></p></li>";
 
                     }
 
@@ -169,11 +129,7 @@ $(document).ready(function() {
 
             reader.readAsDataURL(f);
 
-            //console.log(uploadImgArr);
-
         }
-
-        //console.log(uploadImgArr);
 
     }
 
@@ -196,25 +152,16 @@ $(document).ready(function() {
 
                     //进度条
 
-                    xhr.upload.addEventListener("progress",
+                    xhr.upload.addEventListener("Progress",
 
                         function(e) {
 
                             if (e.lengthComputable) {
 
-                                progress.value = (e.loaded / e.total) * 100;
 
                                 percent.innerHTML = Math.round(e.loaded * 100 / e.total) + "%";
 
                                 //计算网速
-
-                                var nowDate = new Date().getTime();
-
-                                var x = (e.loaded) / 1024;
-
-                                var y = (nowDate - startDate) / 1000;
-
-                                uploadSpeed.innerHTML = "网速：" + (x / y).toFixed(2) + " K\/S";
 
                             } else {
 
@@ -234,11 +181,7 @@ $(document).ready(function() {
 
                             if (xhr.status == 200 && eval("(" + xhr.responseText + ")").status == true) {
 
-                                info.innerHTML += singleImg.name + "上传完成; ";
-
-                                //因为progress事件是按一定时间段返回数据的，所以单独progress不可能100%的，在这设置传完后强制设置100%
-
-                                progress.value = 100;
+                                jQ("li").eq(j).children("p").text("file uploaded~");
 
                                 percent.innerHTML = "100%";
 
@@ -251,9 +194,10 @@ $(document).ready(function() {
                             }
 
                             //上传成功（或者失败）一张后，再次调用fun函数，模拟循环
+                            
 
                             if (j < uploadImgArr.length - 1) {
-
+                                
                                 j++;
 
                                 isUpload = false;
